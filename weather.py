@@ -1,23 +1,30 @@
 import csv
 from datetime import datetime
+from textwrap import dedent, indent
 
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
 
-def format_temperature(temp):
+def format_temperature(temp): #DONE
     """Takes a temperature and returns it in string format with the degrees
         and celcius symbols.
 
     Args:
         temp: A string representing a temperature.
     Returns:
-        A string contain the temperature and "degrees celcius."
+        A string containing the temperature and "degrees celcius."
     """
     return f"{temp}{DEGREE_SYBMOL}"
 
+def convert_date(iso_string): #DONE
+    dt = datetime.fromisoformat(iso_string)
+    day = dt.strftime("%A")
+    date = dt.strftime("%d")
+    month = dt.strftime("%B")
+    year = dt.strftime("%Y")
 
-def convert_date(iso_string):
-    """Converts and ISO formatted date into a human readable format.
+    return(f"{day} {date} {month} {year}")
+    """Converts an ISO formatted date into a human readable format.
 
     Args:
         iso_string: An ISO date string..
@@ -26,9 +33,13 @@ def convert_date(iso_string):
     """
     pass
 
+# print(convert_date("2021-07-02T07:00:00+08:00"))
 
-def convert_f_to_c(temp_in_farenheit):
-    """Converts an temperature from farenheit to celcius.
+def convert_f_to_c(temp_in_farenheit): #DONE
+    c_temp = (float(temp_in_farenheit) - 32) * 5 / 9
+    c_temp = round(c_temp, 1)
+    return c_temp
+    """Converts a temperature from farenheit to celcius.
 
     Args:
         temp_in_farenheit: float representing a temperature.
@@ -37,8 +48,16 @@ def convert_f_to_c(temp_in_farenheit):
     """
     pass
 
+def calculate_mean(weather_data): #DONE
+    sum = 0
+    counter = 0
+    mean = 0
+    for value in weather_data:
+        sum += float(value)
+        counter += 1
+        mean = sum / counter
+    return mean
 
-def calculate_mean(weather_data):
     """Calculates the mean value from a list of numbers.
 
     Args:
@@ -48,8 +67,17 @@ def calculate_mean(weather_data):
     """
     pass
 
+# print(calculate_mean([49, 57, 56, 55, 53]))
 
-def load_data_from_csv(csv_file):
+def load_data_from_csv(csv_file): #DONE
+    list = []
+    with open(csv_file, encoding="utf-8") as csv_file:
+        reader = csv.reader(csv_file, delimiter=",")
+        next(reader)
+        for line in reader:
+            if len(line) != 0:
+                list.append([line[0], int(line[1]),int(line[2])])
+    return list
     """Reads a csv file and stores the data in a list.
 
     Args:
@@ -59,8 +87,25 @@ def load_data_from_csv(csv_file):
     """
     pass
 
+# print(load_data_from_csv("/Users/amandacook/Desktop/She Codes/GIT/she-codes-python/Project/she-codes-python-weather-project-mandydc10/tests/data/example_two.csv"))
 
-def find_min(weather_data):
+def find_min(weather_data): #DONE
+    list = []
+    min_num = 150
+    min_index = None
+
+    if len(weather_data) == 0: 
+        return ()  
+    else:
+        for num in range(len(weather_data)):
+            value = float(weather_data[num])
+            list.append(value)
+            if value <= min_num:
+                min_num = value
+                min_index = num
+
+    return min_num, min_index
+
     """Calculates the minimum value in a list of numbers.
 
     Args:
@@ -70,8 +115,21 @@ def find_min(weather_data):
     """
     pass
 
+def find_max(weather_data): #DONE
+    list = []
+    max_num = -150
+    max_index = None
 
-def find_max(weather_data):
+    if len(weather_data) == 0:
+        return ()  
+    else:
+        for num in range(len(weather_data)):
+            value = float(weather_data[num])
+            list.append(value)
+            if value >= max_num:
+                max_num = value
+                max_index = num
+    return max_num, max_index
     """Calculates the maximum value in a list of numbers.
 
     Args:
@@ -82,18 +140,45 @@ def find_max(weather_data):
     pass
 
 
-def generate_summary(weather_data):
-    """Outputs a summary for the given weather data.
+def generate_summary(weather_data): #NOT DONE
+    lowest_temps = []
+    highest_temps = []
+    counter = 0
+    
+    for line in weather_data:
+        counter += 1
+        lowest_temps.append(line[1])
+        highest_temps.append(line[2])
+    
+    hottest_day_data = find_max(highest_temps)
+    hottest_temp = hottest_day_data[0]
+    hottest_day = hottest_day_data[1]
 
-    Args:
-        weather_data: A list of lists, where each sublist represents a day of weather data.
-    Returns:
-        A string containing the summary information.
-    """
-    pass
+    coldest_day_data = find_min(lowest_temps)
+    coldest_temp = coldest_day_data[0]
+    coldest_temp = convert_f_to_c(coldest_temp)
+    coldest_day = coldest_day_data[1]
+    average_low = calculate_mean(lowest_temps)
+    average_high = calculate_mean(highest_temps)
 
+    title = f"{counter} Day Overview\n"
+    summary = f"The lowest temperature will be {coldest_temp}, and will occur on {coldest_day}.\nThe highest temperature will be {hottest_temp}°C, and will occur on {hottest_day}.\nThe average low this week is {average_low}°C.\nThe average high this week is {average_high}°C."
+    print(title, summary)
+    # print(title, '{:200}'.format(summary))
+    return 
 
-def generate_daily_summary(weather_data):
+generate_summary(load_data_from_csv("tests/data/example_three.csv"))
+
+    # """Outputs a summary for the given weather data.
+
+    # Args:
+    #     weather_data: A list of lists, where each sublist represents a day of weather data.
+    # Returns:
+    #     A string containing the summary information.
+    # """
+    # pass
+
+def generate_daily_summary(weather_data): #NOT DONE
     """Outputs a daily summary for the given weather data.
 
     Args:
