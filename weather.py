@@ -142,24 +142,24 @@ def find_max(weather_data): #DONE
     pass
 
 
-def generate_summary(weather_data): #unfinished (degrees celcius and indent)
+def generate_summary(weather_data): #DONE
     lowest_temps_list = []
     highest_temps_list = []
     num_of_days = len(weather_data)
     
-    # Loop through the weather data to create new lists to hold the hottest and coldest temps
+    # Loop through weather data to create new lists for hottest / coldest temps
     for line in weather_data:
         lowest_temps_list.append(line[1])
         highest_temps_list.append(line[2])
     
-    # Capture the info for the hottest day 
+    # Capture info for hottest day 
     hottest_day_data = find_max(highest_temps_list)
     hottest_temp = hottest_day_data[0]
     hottest_temp_in_c = format_temperature(convert_f_to_c(hottest_temp))
     hottest_day = weather_data[hottest_day_data[1]][0]
     hottest_day_string = convert_date(f"{hottest_day}")
 
-    # Capture the info for the coldest day 
+    # Capture info for coldest day 
     coldest_day_data = find_min(lowest_temps_list)
     coldest_temp = coldest_day_data[0]
     coldest_temp_in_c = format_temperature(convert_f_to_c(coldest_temp))
@@ -177,16 +177,31 @@ def generate_summary(weather_data): #unfinished (degrees celcius and indent)
 
 # generate_summary(load_data_from_csv("tests/data/example_three.csv"))
 
-    # """Outputs a summary for the given weather data.
+    """Outputs a summary for the given weather data.
 
-    # Args:
-    #     weather_data: A list of lists, where each sublist represents a day of weather data.
-    # Returns:
-    #     A string containing the summary information.
-    # """
-    # pass
+    Args:
+        weather_data: A list of lists, where each sublist represents a day of weather data.
+    Returns:
+        A string containing the summary information.
+    """
+    pass
 
-def generate_daily_summary(weather_data): #NOT DONE
+def generate_daily_summary(weather_data): #unfinished, center alignment needed
+    daily_summary_list = []
+    date = None
+    min_temp = 0
+    max_temp = 0
+
+    for line in weather_data:
+        min_temp = format_temperature( convert_f_to_c(line[1]))
+        max_temp = format_temperature( convert_f_to_c(line[2]))
+        date = convert_date(line[0])
+        summary = f"---- {date} ----\nMinimum Temperature: {min_temp}\nMaximum Temperature: {max_temp}\n"
+        daily_summary_list.append(summary)
+        print(summary)
+    
+    # print(daily_summary_list)
+        
     """Outputs a daily summary for the given weather data.
 
     Args:
@@ -195,3 +210,5 @@ def generate_daily_summary(weather_data): #NOT DONE
         A string containing the summary information.
     """
     pass
+
+generate_daily_summary(load_data_from_csv("tests/data/example_three.csv"))
