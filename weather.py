@@ -16,6 +16,8 @@ def format_temperature(temp): #DONE
     """
     return f"{temp}{DEGREE_SYBMOL}"
 
+# print(format_temperature("80"))
+
 def convert_date(iso_string): #DONE
     dt = datetime.fromisoformat(iso_string)
     day = dt.strftime("%A")
@@ -140,34 +142,40 @@ def find_max(weather_data): #DONE
     pass
 
 
-def generate_summary(weather_data): #NOT DONE
-    lowest_temps = []
-    highest_temps = []
-    counter = 0
+def generate_summary(weather_data): #unfinished (degrees celcius and indent)
+    lowest_temps_list = []
+    highest_temps_list = []
+    num_of_days = len(weather_data)
     
+    # Loop through the weather data to create new lists to hold the hottest and coldest temps
     for line in weather_data:
-        counter += 1
-        lowest_temps.append(line[1])
-        highest_temps.append(line[2])
+        lowest_temps_list.append(line[1])
+        highest_temps_list.append(line[2])
     
-    hottest_day_data = find_max(highest_temps)
+    # Capture the info for the hottest day 
+    hottest_day_data = find_max(highest_temps_list)
     hottest_temp = hottest_day_data[0]
-    hottest_day = hottest_day_data[1]
+    hottest_temp_in_c = format_temperature(convert_f_to_c(hottest_temp))
+    hottest_day = weather_data[hottest_day_data[1]][0]
+    hottest_day_string = convert_date(f"{hottest_day}")
 
-    coldest_day_data = find_min(lowest_temps)
+    # Capture the info for the coldest day 
+    coldest_day_data = find_min(lowest_temps_list)
     coldest_temp = coldest_day_data[0]
-    coldest_temp = convert_f_to_c(coldest_temp)
-    coldest_day = coldest_day_data[1]
-    average_low = calculate_mean(lowest_temps)
-    average_high = calculate_mean(highest_temps)
+    coldest_temp_in_c = format_temperature(convert_f_to_c(coldest_temp))
+    coldest_day = weather_data[coldest_day_data[1]][0]
+    coldest_day_string = convert_date(f"{coldest_day}")
 
-    title = f"{counter} Day Overview\n"
-    summary = f"The lowest temperature will be {coldest_temp}, and will occur on {coldest_day}.\nThe highest temperature will be {hottest_temp}°C, and will occur on {hottest_day}.\nThe average low this week is {average_low}°C.\nThe average high this week is {average_high}°C."
-    print(title, summary)
-    # print(title, '{:200}'.format(summary))
-    return 
+    # Capture the averages
+    average_low = format_temperature(convert_f_to_c(calculate_mean(lowest_temps_list)))
+    average_high = format_temperature(convert_f_to_c(calculate_mean(highest_temps_list)))
 
-generate_summary(load_data_from_csv("tests/data/example_three.csv"))
+    # Formatted Output
+    summary = f"{num_of_days} Day Overview\n  The lowest temperature will be {coldest_temp_in_c}, and will occur on {coldest_day_string}.\n  The highest temperature will be {hottest_temp_in_c}, and will occur on {hottest_day_string}.\n  The average low this week is {average_low}.\n  The average high this week is {average_high}.\n"
+    
+    return summary
+
+# generate_summary(load_data_from_csv("tests/data/example_three.csv"))
 
     # """Outputs a summary for the given weather data.
 
