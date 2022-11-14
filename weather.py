@@ -92,7 +92,6 @@ def load_data_from_csv(csv_file): #DONE
 # print(load_data_from_csv("/Users/amandacook/Desktop/She Codes/GIT/she-codes-python/Project/she-codes-python-weather-project-mandydc10/tests/data/example_two.csv"))
 
 def find_min(weather_data): #DONE
-    list = []
     min_num = 150
     min_index = None
 
@@ -101,7 +100,6 @@ def find_min(weather_data): #DONE
     else:
         for num in range(len(weather_data)):
             value = float(weather_data[num])
-            list.append(value)
             if value <= min_num:
                 min_num = value
                 min_index = num
@@ -118,7 +116,6 @@ def find_min(weather_data): #DONE
     pass
 
 def find_max(weather_data): #DONE
-    list = []
     max_num = -150
     max_index = None
 
@@ -127,7 +124,6 @@ def find_max(weather_data): #DONE
     else:
         for num in range(len(weather_data)):
             value = float(weather_data[num])
-            list.append(value)
             if value >= max_num:
                 max_num = value
                 max_index = num
@@ -187,20 +183,21 @@ def generate_summary(weather_data): #DONE
     pass
 
 def generate_daily_summary(weather_data): #unfinished, center alignment needed
-    daily_summary_list = []
+    daily_summary_list = ""
     date = None
     min_temp = 0
     max_temp = 0
 
-    for line in weather_data:
-        min_temp = format_temperature( convert_f_to_c(line[1]))
-        max_temp = format_temperature( convert_f_to_c(line[2]))
-        date = convert_date(line[0])
-        summary = f"---- {date} ----\nMinimum Temperature: {min_temp}\nMaximum Temperature: {max_temp}\n"
-        daily_summary_list.append(summary)
-        print(summary)
+    for item in range(len(weather_data)):
+        min_temp = format_temperature( convert_f_to_c(weather_data[item][1]))
+        max_temp = format_temperature( convert_f_to_c(weather_data[item][2]))
+        date = convert_date(weather_data[item][0])
+        summary = f"---- {date} ----\n  Minimum Temperature: {min_temp}\n  Maximum Temperature: {max_temp}\n\n"
+        # print(f"{summary}\n")
+        daily_summary_list += f"{summary}"
     
-    # print(daily_summary_list)
+    print(daily_summary_list)
+    return daily_summary_list
         
     """Outputs a daily summary for the given weather data.
 
@@ -211,4 +208,4 @@ def generate_daily_summary(weather_data): #unfinished, center alignment needed
     """
     pass
 
-generate_daily_summary(load_data_from_csv("tests/data/example_three.csv"))
+generate_daily_summary(load_data_from_csv("tests/data/example_one.csv"))
