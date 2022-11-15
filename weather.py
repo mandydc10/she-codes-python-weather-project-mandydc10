@@ -1,6 +1,5 @@
 import csv
 from datetime import datetime
-from textwrap import dedent, indent
 
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
@@ -193,10 +192,8 @@ def generate_daily_summary(weather_data): #unfinished, center alignment needed
         max_temp = format_temperature( convert_f_to_c(weather_data[item][2]))
         date = convert_date(weather_data[item][0])
         summary = f"---- {date} ----\n  Minimum Temperature: {min_temp}\n  Maximum Temperature: {max_temp}\n\n"
-        # print(f"{summary}\n")
         daily_summary_list += f"{summary}"
     
-    print(daily_summary_list)
     return daily_summary_list
         
     """Outputs a daily summary for the given weather data.
@@ -208,4 +205,4 @@ def generate_daily_summary(weather_data): #unfinished, center alignment needed
     """
     pass
 
-generate_daily_summary(load_data_from_csv("tests/data/example_one.csv"))
+# generate_daily_summary(load_data_from_csv("tests/data/example_one.csv"))
